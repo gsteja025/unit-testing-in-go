@@ -7,13 +7,33 @@ import (
 	"net/http"
 	"temp/schema"
 
-	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
 )
 
+type prods interface {
+	//Createproduct(w http.ResponseWriter, r *http.Request)
+	get(schema.Product) bool
+}
+
 type Dbserver struct {
 	Db *gorm.DB
+}
+
+// type mystruct struct{
+
+// }
+type empty struct {
+}
+
+var s Dbserver
+
+var url string = "http://localhost:8000/products/{name}"
+
+func (e empty) get(prod schema.Product) bool {
+
+	s.Db.Save(&prod)
+	return true
 }
 
 func (s Dbserver) Getproducts(w http.ResponseWriter, r *http.Request) {
@@ -30,27 +50,18 @@ func (s Dbserver) Getproducts(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (s Dbserver) GetproductByid(w http.ResponseWriter, r *http.Request) {
-
-	productid := mux.Vars(r)["id"]
-
-	var prod schema.Product
-
-	s.Db.Model(&schema.Product{}).First(&prod, productid)
-	w.Header().Set("Content-type", "application/json")
-	json.NewEncoder(w).Encode(prod)
-	return
-
-}
-
-func (s Dbserver) Createproduct(w http.ResponseWriter, r *http.Request) {
+func (e empty) Createproduct(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("content-type", "application/json")
 
 	var prod schema.Product
 	json.NewDecoder(r.Body).Decode(&prod)
 
-	s.Db.Save(&prod)
+	found := empty{}.get(prod)
 	json.NewEncoder(w).Encode(prod)
+
+	if found {
+		
+	}
 	return
 }

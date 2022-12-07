@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	prod "temp/handlers"
-	rev "temp/handlers"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
@@ -55,20 +54,21 @@ func main() {
 
 	router := mux.NewRouter()
 	flag.Parse()
+
 	fmt.Println(*f)
 
 	var s prod.Dbserver = prod.Dbserver{db}
 	router.HandleFunc("/products", s.Getproducts).Methods("GET")
 
-	router.HandleFunc("/products/{id}", s.GetproductByid).Methods("GET")
+	// router.HandleFunc("/products/{name}", s.GetproductByname).Methods("GET")
 
 	router.HandleFunc("/products/{id}/reviews", s.Getallreviews).Methods("GET")
 
 	router.HandleFunc("/products/create", s.Createproduct).Methods("POST")
 
-	router.HandleFunc("/products/{id}/reviews/create", rev.CreateReview).Methods("POST")
+	//router.HandleFunc("/products/{id}/reviews/create", rev.CreateReview).Methods("POST")
 
-	router.HandleFunc("/products/{productid}/reviews/{reviewid}", rev.Updatereview).Methods("PUT")
+	//router.HandleFunc("/products/{productid}/reviews/{reviewid}", rev.Updatereview).Methods("PUT")
 
 	// fmt.Println("Getting products")
 	// db.query

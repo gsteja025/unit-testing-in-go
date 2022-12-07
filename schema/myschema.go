@@ -48,9 +48,8 @@ func createDB(db *gorm.DB) *gorm.DB {
 			{Color: "Brown"},
 		},
 		Myratings: []Rating{
-			{Name: "GST",
-				Review: "This guitar strings are so good",
-				Ratin:  6,
+			{Review: "This guitar strings are so good",
+				Ratin: 6,
 			},
 		},
 	})
